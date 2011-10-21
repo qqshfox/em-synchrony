@@ -19,10 +19,14 @@ module EventMachine
         f = Fiber.current
 
         begin
-          conn = acquire(f)
+          if conn = @reserved[f.object_id]
+            is_reserved = true
+          else
+            conn = acquire(f)
+          end
           yield conn
         ensure
-          release(f) if not async
+          release(f) if !async && !is_reserved
         end
       end
 
