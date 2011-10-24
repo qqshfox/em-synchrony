@@ -22,6 +22,7 @@ module EventMachine
           if conn = @reserved[f.object_id]
             is_reserved = true
           else
+            is_reserved = false
             conn = acquire(f)
           end
           yield conn
