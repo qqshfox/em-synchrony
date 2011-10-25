@@ -19,7 +19,7 @@ module EventMachine
         f = Fiber.current
 
         begin
-          if conn = @reserved[f.object_id]
+          if !async && (conn = @reserved[f.object_id])
             is_reserved = true
           else
             is_reserved = false
