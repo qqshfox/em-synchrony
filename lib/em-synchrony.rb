@@ -46,13 +46,7 @@ module EventMachine
     #
     def self.sync(df)
       f = Fiber.current
-      xback = proc {|r|
-        if f == Fiber.current
-          return r
-        else
-          f.resume r
-        end
-      }
+      xback = proc {|r| f == Fiber.current ? r : f.resume(r)}
       df.callback &xback
       df.errback &xback
 
